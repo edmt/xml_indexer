@@ -14,7 +14,7 @@ defmodule XmlIndexer.Mixfile do
   def application do
     [applications: [:logger],
      registered: [:xml_indexer],
-     mod: {XmlIndexer, 999}
+     mod: {XmlIndexer, []}
     ]
   end
 
