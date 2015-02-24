@@ -13,6 +13,7 @@ defmodule XmlIndexer.Supervisor do
     # Then the rest of the workers
     Supervisor.start_child(sup, worker(XmlIndexer.Indexer, []))
     Supervisor.start_child(sup, worker(XmlIndexer.Polling, [redis]))
+    Supervisor.start_child(sup, worker(XmlIndexer.Repo, []))
   end
 
   def init(_) do
