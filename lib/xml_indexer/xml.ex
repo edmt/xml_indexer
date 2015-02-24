@@ -8,23 +8,24 @@ defmodule XmlIndexer.Xml do
 
   def test(doc) do
     _doc_id = uuid(doc)
-    for corpus <- conceptos(doc) do
-      IO.inspect %{
+    x = for corpus <- conceptos(doc) do
+      desc = descripcion(corpus)
+      %{
         id: corpus_id(_doc_id, corpus),
-        descripcion: descripcion(corpus),
+        descripcion: desc,
         unidad: unidad(corpus),
         valor_unitario: valor_unitario(corpus),
-        no_identificacion: no_identificacion(corpus)
+        no_identificacion: no_identificacion(corpus),
+        tokens: tokenize(desc)
       }
-      tokenize(descripcion(corpus))      
     end
+    IO.inspect x
   end
 
 
   ## Text manipulation
   defp tokenize(corpus) do
-    tokens = for token <- Regex.split(~r/\s/, corpus), valid?(token), do: String.downcase token
-    IO.inspect tokens
+    for token <- Regex.split(~r/\s/, corpus), valid?(token), do: String.downcase token
   end
 
   defp valid?(token) do
@@ -33,7 +34,6 @@ defmodule XmlIndexer.Xml do
       !has_punctuation?(token) &&
       !stopword?(token)
   end
-
   defp stopword?(token),        do: Set.member?(@stopwords, token)
   defp large?(token),           do: String.length(token) >= 3
   defp has_digits?(token),      do: Regex.match?(~r/[[:digit:]]/, token)
