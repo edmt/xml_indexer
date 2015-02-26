@@ -1,16 +1,10 @@
-# https://code.google.com/p/erlang/source/browse/trunk/lib/xmerl/include/xmerl.hrl?r=160
-# http://elixir-lang.org/docs/stable/elixir/Record.html
-# http://isotope11.com/blog/parsing-xml-using-elixir
-# Convert a record to a keyword list
-# user(record) #=> [name: "meg", age: 26]
-
 defmodule XmlIndexer.Indexer do
+  use GenServer
   require Record
+
   Record.defrecord :xmlElement,   Record.extract(:xmlElement,   from_lib: "xmerl/include/xmerl.hrl")
   Record.defrecord :xmlAttribute, Record.extract(:xmlAttribute, from_lib: "xmerl/include/xmerl.hrl")
   Record.defrecord :xmlText,      Record.extract(:xmlText,      from_lib: "xmerl/include/xmerl.hrl")
-
-  use GenServer
 
   ## External API
   def start_link() do
@@ -27,7 +21,7 @@ defmodule XmlIndexer.Indexer do
     IO.puts "Diciendo hola... #{inspect document}"
 
     { document, _rest} = :xmerl_scan.file(document)
-    XmlIndexer.Xml.test(document)
+    InvertedIndex.Queries.save XmlIndexer.Xml.extract(document)
     { :noreply, [] }
   end
 end

@@ -6,20 +6,21 @@ defmodule XmlIndexer.Xml do
 
   @stopwords Enum.into(Application.get_env(:stopwords, :spanish), HashSet.new)
 
-  def test(doc) do
+  def extract(doc) do
     _doc_id = uuid(doc)
-    x = for corpus <- conceptos(doc) do
+    for corpus <- conceptos(doc) do
       desc = descripcion(corpus)
-      %{
-        id: corpus_id(_doc_id, corpus),
-        descripcion: desc,
-        unidad: unidad(corpus),
-        valor_unitario: valor_unitario(corpus),
-        no_identificacion: no_identificacion(corpus),
+      {
+        %Corpus{
+          corpusId: corpus_id(_doc_id, corpus),
+          corpus: desc,
+          unidad: unidad(corpus),
+          valorUnitario: valor_unitario(corpus)#,
+          #no_identificacion: no_identificacion(corpus)
+        },
         tokens: tokenize(desc)
       }
     end
-    IO.inspect x
   end
 
 
@@ -42,7 +43,10 @@ defmodule XmlIndexer.Xml do
 
   ## Xml manipulation
   defp no_identificacion(corpus),  do: attr(corpus, "//cfdi:Concepto", "noIdentificacion")
-  defp valor_unitario(corpus),     do: attr(corpus, "//cfdi:Concepto", "valorUnitario")
+  defp valor_unitario(corpus)      do
+    {float, _} = Float.parse attr(corpus, "//cfdi:Concepto", "valorUnitario")
+    float
+  end
   defp unidad(corpus),             do: attr(corpus, "//cfdi:Concepto", "unidad")
   defp descripcion(corpus),        do: attr(corpus, "//cfdi:Concepto", "descripcion")
   defp corpus_id(_doc_id, corpus), do: _doc_id <> "_" <> to_string(xmlElement(corpus, :pos))
