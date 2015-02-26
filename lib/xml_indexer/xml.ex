@@ -18,7 +18,7 @@ defmodule XmlIndexer.Xml do
           valorUnitario: valor_unitario(corpus)#,
           #no_identificacion: no_identificacion(corpus)
         },
-        tokens: tokenize(desc)
+        tokenize(desc)
       }
     end
   end
