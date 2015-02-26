@@ -1,5 +1,10 @@
 defmodule XmlIndexer.Indexer do
   use GenServer
+  require Record
+
+  Record.defrecord :xmlElement,   Record.extract(:xmlElement,   from_lib: "xmerl/include/xmerl.hrl")
+  Record.defrecord :xmlAttribute, Record.extract(:xmlAttribute, from_lib: "xmerl/include/xmerl.hrl")
+  Record.defrecord :xmlText,      Record.extract(:xmlText,      from_lib: "xmerl/include/xmerl.hrl")
 
   ## External API
   def start_link() do
@@ -14,6 +19,9 @@ defmodule XmlIndexer.Indexer do
   ## GenServer implementation
   def handle_cast({:index, document}, _state) do
     IO.puts "Diciendo hola... #{inspect document}"
+
+    { document, _rest} = :xmerl_scan.file(document)
+    InvertedIndex.Queries.save XmlIndexer.Xml.extract(document)
     { :noreply, [] }
   end
 end
