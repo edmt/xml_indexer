@@ -17,8 +17,7 @@ defmodule XmlIndexer.Indexer do
 
     %{"path" => filepath, "company_rfc" => rfc} = Poison.Parser.parse!(document)
     { xml, _rest} = :xmerl_scan.file(filepath)
-    #InvertedIndex.Queries.save
-    XmlIndexer.Xml.extract(xml, rfc)
+    XmlIndexer.Xml.extract(xml, rfc) |> InvertedIndex.Queries.save
     { :noreply, [] }
   end
 end
