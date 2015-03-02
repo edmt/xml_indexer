@@ -6,6 +6,7 @@ defmodule Corpus do
     field :corpusId, :string
     field :corpus, :string
     field :unidad, :string
+    field :noIdentificacion, :string
     field :valorUnitario, :float
   end
 end

@@ -33,5 +33,7 @@ config :xml_indexer, XmlIndexer.Repo,
   password: "adminDDL1!",
   hostname: "172.17.1.90"
 
+config :particular_treatment,
+  "TSO991022PB6": XmlIndexer.Xml.Parser.Soriana
 
 import_config "#{Mix.env}.exs"

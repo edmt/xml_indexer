@@ -18,10 +18,12 @@ defmodule XmlIndexer.Indexer do
 
   ## GenServer implementation
   def handle_cast({:index, document}, _state) do
-    IO.puts "Diciendo hola... #{inspect document}"
+    IO.puts "Indexando... #{inspect document}"
 
-    { document, _rest} = :xmerl_scan.file(document)
-    InvertedIndex.Queries.save XmlIndexer.Xml.extract(document)
+    %{"path" => filepath, "company_rfc" => rfc} = Poison.Parser.parse!(document)
+    { xml, _rest} = :xmerl_scan.file(filepath)
+    #InvertedIndex.Queries.save
+    XmlIndexer.Xml.extract(xml, rfc)
     { :noreply, [] }
   end
 end
