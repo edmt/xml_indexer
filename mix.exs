@@ -31,7 +31,8 @@ defmodule XmlIndexer.Mixfile do
     [
       {:exredis, github: "artemeff/exredis", tag: "0.1.0"},
       {:tds_ecto, "~> 0.1.4"},
-      {:ecto, "~> 0.8.1"}
+      {:ecto, "~> 0.8.1"},
+      {:poison, "~> 1.3.1" }
     ]
   end
 end
