@@ -15,8 +15,9 @@ defmodule XmlIndexer.Indexer do
   def handle_cast({:index, document}, _state) do
     IO.puts "Indexando... #{inspect document}"
 
-    %{"path" => filepath, "company_rfc" => rfc} = Poison.Parser.parse!(document)
-    { xml, _rest} = :xmerl_scan.file(filepath)
+    %{"xml_string" => xml_string, "company_rfc" => rfc} = Poison.Parser.parse!(document)
+    { xml, _rest}  = :binary.bin_to_list(xml_string) |> :xmerl_scan.string
+
     XmlIndexer.Xml.extract(xml, rfc) |> InvertedIndex.Queries.save
     { :noreply, [] }
   end
