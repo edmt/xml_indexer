@@ -12,7 +12,7 @@ defmodule XmlIndexer.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :tds_ecto, :ecto],
+    [applications: [:logger, :postgrex, :ecto],
      registered: [:xml_indexer],
      mod: {XmlIndexer, []}
     ]
@@ -30,8 +30,8 @@ defmodule XmlIndexer.Mixfile do
   defp deps do
     [
       {:exredis, github: "artemeff/exredis", tag: "0.1.0"},
-      {:tds_ecto, "~> 0.1.4"},
-      {:ecto, "~> 0.8.1"},
+      {:postgrex, "~> 0.8.0"},
+      {:ecto, "~> 0.9.0"},
       {:poison, "~> 1.3.1" }
     ]
   end
