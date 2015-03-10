@@ -12,6 +12,7 @@ defmodule XmlIndexer.Supervisor do
     {:ok, redis} = Supervisor.start_child(sup, worker(Exredis, Application.get_env(:redis, :server)))
     # Then the rest of the workers
     Supervisor.start_child(sup, worker(XmlIndexer.Indexer, []))
+    Supervisor.start_child(sup, worker(XmlIndexer.Acknowledge, [redis, Application.get_env(:redis, :consumer_queue)]))
     Supervisor.start_child(sup, worker(XmlIndexer.Polling, [redis, Application.get_env(:redis, :consumer_queue)]))
     Supervisor.start_child(sup, worker(XmlIndexer.Repo, []))
   end
