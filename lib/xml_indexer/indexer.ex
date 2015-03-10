@@ -16,12 +16,13 @@ defmodule XmlIndexer.Indexer do
     IO.puts "Indexando... #{inspect document}"
 
     %{"xml_string" => xml_string, "company_rfc" => rfc} = Poison.Parser.parse!(document)
-    { xml, _rest}  = :binary.bin_to_list(xml_string) |> :xmerl_scan.string
-
-    #%{ "path" => filepath, "company_rfc" => rfc } = Poison.Parser.parse!(document)
-    #{ xml, _rest} = :xmerl_scan.file(filepath)
-
+    { xml, _rest}  = extract(Mix.env, xml_string)
     XmlIndexer.Xml.extract(xml, rfc) |> InvertedIndex.Queries.save
+    XmlIndexer.Acknowledge.ack document
+
     { :noreply, [] }
   end
+
+  defp extract(:prod, document), do: :binary.bin_to_list(document) |> :xmerl_scan.string
+  defp extract(:dev, document), do: :xmerl_scan.file(document)
 end
