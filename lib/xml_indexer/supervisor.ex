@@ -13,11 +13,12 @@ defmodule XmlIndexer.Supervisor do
     # Then the rest of the workers
     Supervisor.start_child(sup, worker(XmlIndexer.Indexer, []))
     Supervisor.start_child(sup, worker(XmlIndexer.Acknowledge, [redis, Application.get_env(:redis, :consumer_queue)]))
+    Supervisor.start_child(sup, worker(XmlIndexer.Flush, [redis, Application.get_env(:redis, :consumer_queue)]))
     Supervisor.start_child(sup, worker(XmlIndexer.Polling, [redis, Application.get_env(:redis, :consumer_queue)]))
     Supervisor.start_child(sup, worker(XmlIndexer.Repo, []))
   end
 
   def init(_) do
-    supervise [], strategy: :one_for_one
+    supervise [], strategy: :one_for_one, max_restarts: 50, max_seconds: 5
   end
 end
