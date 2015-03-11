@@ -1,4 +1,4 @@
-defmodule XmlIndexer.Polling do
+defmodule XmlIndexer.Redis.Polling do
   use GenServer
 
   ## External API

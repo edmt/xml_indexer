@@ -1,4 +1,4 @@
-defmodule XmlIndexer.Flush do
+defmodule XmlIndexer.Redis.Flush do
   use GenServer
   @ms       1
   @second   1000 * @ms

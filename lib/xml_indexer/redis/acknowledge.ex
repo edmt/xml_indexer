@@ -1,4 +1,4 @@
-defmodule XmlIndexer.Acknowledge do
+defmodule XmlIndexer.Redis.Acknowledge do
   use GenServer
 
   ## External API
