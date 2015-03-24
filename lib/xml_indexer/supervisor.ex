@@ -8,9 +8,9 @@ defmodule XmlIndexer.Supervisor do
   end
 
   def start_workers(sup) do
-    Supervisor.start_child(sup, supervisor(XmlIndexer.Redis.SubSupervisor, []))
     Supervisor.start_child(sup, worker(XmlIndexer.Repo, []))
     Supervisor.start_child(sup, worker(XmlIndexer.Indexer, []))
+    Supervisor.start_child(sup, supervisor(XmlIndexer.Redis.SubSupervisor, []))
   end
 
   def init(_) do
