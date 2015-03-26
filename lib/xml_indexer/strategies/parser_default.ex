@@ -7,6 +7,9 @@ defmodule XmlIndexer.Xml.Parser.Default do
 
   def extract(doc) do
     _doc_id = uuid(doc)
+    _emisor   = emisor_rfc(doc)
+    _receptor = receptor_rfc(doc)
+
     for corpus <- conceptos(doc) do
       desc = descripcion(corpus)
       {
@@ -15,7 +18,9 @@ defmodule XmlIndexer.Xml.Parser.Default do
           corpus: desc,
           unidad: unidad(corpus),
           valorUnitario: valor_unitario(corpus),
-          noIdentificacion: no_identificacion(corpus)
+          noIdentificacion: no_identificacion(corpus),
+          emisor: _emisor,
+          receptor: _receptor
         },
         XmlIndexer.Token.tokenize(desc)
       }
@@ -39,6 +44,10 @@ defmodule XmlIndexer.Xml.Parser.Default do
   defp conceptos(doc),             do: :xmerl_xpath.string('//cfdi:Concepto', doc)
 
   defp uuid(doc),                  do: attr(doc, "//tfd:TimbreFiscalDigital", "UUID")
+
+  defp emisor_rfc(doc),            do: attr(doc, "//cfdi:Emisor", "rfc")
+
+  defp receptor_rfc(doc),          do: attr(doc, "//cfdi:Receptor", "rfc")
 
   defp attr(doc, xpath, attribute) do
     full_expression = to_char_list(xpath <> "/@" <> attribute)

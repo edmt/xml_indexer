@@ -7,7 +7,10 @@ defmodule XmlIndexer.Xml.Parser.Soriana do
   Record.defrecord :xmlText,      Record.extract(:xmlText,      from_lib: "xmerl/include/xmerl.hrl")
 
   def extract(doc) do
-    _doc_id = uuid(doc)
+    _doc_id   = uuid(doc)
+    _emisor   = emisor_rfc(doc)
+    _receptor = receptor_rfc(doc)
+
     for corpus <- conceptos(doc) do
       desc = descripcion(corpus)
       {
@@ -16,7 +19,9 @@ defmodule XmlIndexer.Xml.Parser.Soriana do
           corpus: desc,
           unidad: unidad(corpus),
           valorUnitario: valor_unitario(corpus),
-          noIdentificacion: no_identificacion(corpus)
+          noIdentificacion: no_identificacion(corpus),
+          emisor: _emisor,
+          receptor: _receptor
         },
         XmlIndexer.Token.tokenize(desc)
       }
@@ -40,6 +45,10 @@ defmodule XmlIndexer.Xml.Parser.Soriana do
   defp conceptos(doc),             do: :xmerl_xpath.string('//sor:ftFEDet', doc)
 
   defp uuid(doc),                  do: attr(doc, "//tfd:TimbreFiscalDigital", "UUID")
+
+  defp emisor_rfc(doc),            do: attr(doc, "//cfdi:Emisor", "rfc")
+
+  defp receptor_rfc(doc),          do: attr(doc, "//cfdi:Receptor", "rfc")
 
   defp attr(doc, xpath, attribute) do
     full_expression = to_char_list(xpath <> "/@" <> attribute)
