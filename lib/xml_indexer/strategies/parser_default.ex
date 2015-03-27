@@ -12,17 +12,14 @@ defmodule XmlIndexer.Xml.Parser.Default do
 
     for corpus <- conceptos(doc) do
       desc = descripcion(corpus)
-      {
-        %Corpus{
-          corpusId: corpus_id(_doc_id, corpus),
-          corpus: desc,
-          unidad: unidad(corpus),
-          valorUnitario: valor_unitario(corpus),
-          noIdentificacion: no_identificacion(corpus),
-          emisor: _emisor,
-          receptor: _receptor
-        },
-        XmlIndexer.Token.tokenize(desc)
+      %Corpus{
+        corpusId: corpus_id(_doc_id, corpus),
+        corpus: desc,
+        unidad: unidad(corpus),
+        valorUnitario: valor_unitario(corpus),
+        noIdentificacion: no_identificacion(corpus),
+        emisor: _emisor,
+        receptor: _receptor
       }
     end
   end

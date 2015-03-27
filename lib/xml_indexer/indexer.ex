@@ -17,7 +17,7 @@ defmodule XmlIndexer.Indexer do
 
     %{"xml_string" => xml_string, "company_rfc" => rfc} = Poison.Parser.parse!(document)
     { xml, _rest}  = extract(Mix.env, xml_string)
-    XmlIndexer.Xml.extract(xml, rfc) |> InvertedIndex.Queries.save
+    XmlIndexer.Xml.extract(xml, rfc) |> Corpus.Query.save_all
     XmlIndexer.Redis.Acknowledge.ack document
 
     { :noreply, [] }
