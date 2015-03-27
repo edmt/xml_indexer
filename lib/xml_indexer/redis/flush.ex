@@ -33,7 +33,7 @@ defmodule XmlIndexer.Redis.Flush do
   end
 
   def init(_state) do
-    :erlang.send_after(@interval, __MODULE__, :tick)
+    send(__MODULE__, :tick)
     {:ok, _state}
   end
 
