@@ -1,6 +1,6 @@
 defmodule XmlIndexer.Xml do
-  def extract(xml, rfc) do    
-    strategy(rfc).extract(xml)
+  def extract(xml, rfc, options) do
+    strategy(rfc).extract(xml, options)
   end
 
   defp strategy(rfc) do
