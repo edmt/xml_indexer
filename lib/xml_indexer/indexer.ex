@@ -15,9 +15,9 @@ defmodule XmlIndexer.Indexer do
   def handle_cast({:index, document}, _state) do
     IO.puts "Indexando... #{inspect document}"
 
-    %{"xml_string" => xml_string, "company_rfc" => rfc} = Poison.Parser.parse!(document)
+    %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id} = Poison.Parser.parse!(document)
     { xml, _rest}  = extract(Mix.env, xml_string)
-    XmlIndexer.Xml.extract(xml, rfc) |> Corpus.Query.save_all
+    XmlIndexer.Xml.extract(xml, rfc, [ticket_id: ticket_id]) |> Corpus.Query.save_all
     XmlIndexer.Redis.Acknowledge.ack document
 
     { :noreply, [] }

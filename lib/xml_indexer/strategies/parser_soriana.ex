@@ -6,7 +6,7 @@ defmodule XmlIndexer.Xml.Parser.Soriana do
   Record.defrecord :xmlAttribute, Record.extract(:xmlAttribute, from_lib: "xmerl/include/xmerl.hrl")
   Record.defrecord :xmlText,      Record.extract(:xmlText,      from_lib: "xmerl/include/xmerl.hrl")
 
-  def extract(doc) do
+  def extract(doc, options) do
     _doc_id   = uuid(doc)
     _emisor   = emisor_rfc(doc)
     _receptor = receptor_rfc(doc)
@@ -14,6 +14,7 @@ defmodule XmlIndexer.Xml.Parser.Soriana do
     for corpus <- conceptos(doc) do
       desc = descripcion(corpus)
       %Corpus{
+        ticketId: Keyword.get(options, :ticket_id),
         corpusId: corpus_id(_doc_id, corpus),
         corpus: desc,
         unidad: unidad(corpus),

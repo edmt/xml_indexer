@@ -7,5 +7,7 @@ config :redis,
 
 config :xml_indexer, XmlIndexer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: "my_app",
+  username: "postgres",
+  password: "postgres",
+  database: "fm_services_dev",
   hostname: "postgres.dev"
