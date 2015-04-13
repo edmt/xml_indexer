@@ -1,13 +1,16 @@
 defmodule XmlIndexer.Redis.Flush do
   use GenServer
+
+  require Logger
+
   @ms       1
   @second   1000 * @ms
   @minute   60 * @second
-  @interval 10 * @minute
+  @interval  5 * @minute
 
   ## External API
   def start_link(redis, queue) do
-    IO.puts("Starting the flush process... #{inspect self}")    
+    Logger.debug("Starting the flush process... #{inspect self}")
     GenServer.start_link(__MODULE__, [redis, queue], name: __MODULE__)
   end
 
@@ -16,6 +19,7 @@ defmodule XmlIndexer.Redis.Flush do
     [redis, queue] = _state
     current_time   = :calendar.universal_time
     documents = redis |> Exredis.query ["LRANGE", "queue:#{queue}-process", "0", "-1"]
+    Logger.debug("Flushing process is running. Requeueing #{Enum.count(documents)} documents.")
 
     for doc <- documents do
       %{"created_at" => timestamp} = Poison.Parser.parse!(doc)

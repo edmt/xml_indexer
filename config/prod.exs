@@ -7,6 +7,7 @@ config :redis,
 
 config :xml_indexer, XmlIndexer.Repo,
   adapter: Ecto.Adapters.Postgres,
+  timeout: 10000,
   username: "facturame-development",
   password: "facturame-development",
   database: "facturame-development",
