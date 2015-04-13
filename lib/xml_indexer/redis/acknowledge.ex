@@ -1,9 +1,11 @@
 defmodule XmlIndexer.Redis.Acknowledge do
   use GenServer
 
+  require Logger
+
   ## External API
   def start_link(redis, queue) do
-    IO.puts("Starting the acknowledge process... #{inspect self}")
+    Logger.debug("Starting the acknowledge process... #{inspect self}")
     GenServer.start_link(__MODULE__, [redis, queue], name: __MODULE__)
   end
 

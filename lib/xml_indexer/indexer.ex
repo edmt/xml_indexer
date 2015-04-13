@@ -5,7 +5,7 @@ defmodule XmlIndexer.Indexer do
 
   ## External API
   def start_link() do
-    IO.puts("Starting the index process... #{inspect self}")
+    Logger.debug("Starting the index process... #{inspect self}")
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
@@ -15,8 +15,8 @@ defmodule XmlIndexer.Indexer do
 
   ## GenServer implementation
   def handle_cast({:index, document}, _state) do
-    case Poison.Parser.parse!(document) do
-      %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id} ->
+    case Poison.Parser.parse(document) do
+      {:ok, %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id, "created_at" => _created_at}} ->
 
         Logger.debug "Indexando ticket: #{ticket_id}, company_rfc: #{rfc}"
         { xml, _rest}  = extract(Mix.env, xml_string)
@@ -24,7 +24,7 @@ defmodule XmlIndexer.Indexer do
         XmlIndexer.Redis.Acknowledge.ack document
 
       _ ->
-        Logger.debug "El documento no cumple con esquema válido #{inspect document}"
+        Logger.debug "Not a valid document #{inspect document}"
         XmlIndexer.Redis.Acknowledge.ack document
     end
 

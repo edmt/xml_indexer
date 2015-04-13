@@ -1,9 +1,11 @@
 defmodule XmlIndexer.Redis.Polling do
   use GenServer
 
+  require Logger
+
   ## External API
   def start_link(redis, queue) do
-    IO.puts("Starting the polling process... #{inspect self}")
+    Logger.debug("Starting the polling process... #{inspect self}")
     link  = GenServer.start_link(__MODULE__, [redis, queue], name: __MODULE__)
     GenServer.cast __MODULE__, {:loop, redis, queue}
     link
