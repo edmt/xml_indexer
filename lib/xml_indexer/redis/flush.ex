@@ -3,7 +3,7 @@ defmodule XmlIndexer.Redis.Flush do
   @ms       1
   @second   1000 * @ms
   @minute   60 * @second
-  @interval 10 * @minute
+  @interval 5 * @minute
 
   ## External API
   def start_link(redis, queue) do
