@@ -15,8 +15,6 @@ defmodule Corpus do
 end
 
 defmodule Corpus.Query do
-  import Ecto.Query
-
   def save_all(documents) do
     XmlIndexer.Repo.transaction(fn ->
       for corpus <- documents, do: XmlIndexer.Repo.insert(corpus)
