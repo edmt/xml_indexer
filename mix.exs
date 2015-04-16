@@ -3,8 +3,10 @@ defmodule XmlIndexer.Mixfile do
 
   def project do
     [app: :xml_indexer,
-     version: "0.0.1",
+     version: "1.0.0",
      elixir: "~> 1.0",
+     build_embedded: Mix.env == :prod,
+     start_permanent: Mix.env == :prod,
      deps: deps]
   end
 
@@ -12,9 +14,9 @@ defmodule XmlIndexer.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger],
+    [applications: [:postgrex, :decimal, :poolboy, :ecto, :exredis, :eredis, :poison, :mix, :xmerl],
      registered: [:xml_indexer],
-     mod: {XmlIndexer, 999}
+     mod: {XmlIndexer, []}
     ]
   end
 
@@ -29,7 +31,11 @@ defmodule XmlIndexer.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:exredis, github: "artemeff/exredis", tag: "0.1.0"}
+      {:exredis, "~> 0.1.1"},
+      {:postgrex, "~> 0.8.0"},
+      {:ecto, "~> 0.9.0"},
+      {:poison, "~> 1.3.1" },
+      {:exrm, "~> 0.15.3"}
     ]
   end
 end
