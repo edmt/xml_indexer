@@ -16,7 +16,8 @@ defmodule XmlIndexer.Redis.SubSupervisor do
     [host: h, port: p, database: db, password: pwd, reconnect_sleep: rs, consumer_queue: queue] = conf
 
     # Starting redis client
-    case Supervisor.start_child(sup, worker(Exredis, [h, p, db, pwd, rs])) do
+    client = Supervisor.start_child(sup, worker(Exredis, [h, p, db, pwd, rs]))
+    case client do
       {:ok, redis} ->
         Logger.debug "Parent process: #{inspect redis}"
         Supervisor.start_child(sup, worker(XmlIndexer.Redis.Acknowledge, [redis, queue]))
