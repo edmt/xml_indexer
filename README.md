@@ -35,13 +35,92 @@ en desarrollo. O
 
 en un ambiente de producción.
 
-La manera más sencilla es especificar manualmente las direcciones en el archivo */etc/hosts*.
+La manera más sencilla es especificar manualmente las direcciones en el archivo ***/etc/hosts***.
+
+### Instalación de redis para desarrollo
+
+redis-install.sh:
+
+```bash
+# Descarga de tarball
+wget https://github.com/antirez/redis/archive/2.8.19.tar.gz
+# Extracción
+tar xvfz 2.8.19.tar.gz
+# Compilación
+cd redis-2.8.19
+make
+```
+
+Uso:
+
+```bash
+# Inicia el servidor
+src/redis-server
+# Inicia el cliente
+src/redis-cli
+```
+
+### Instalación de PostgreSQL para desarrollo
+
+postgresql-install.sh:
+
+```bash
+brew install postgresql
+```
+
+Configuración:
+
+```bash
+createdb fm_services_dev
+# Se sugiere asignar "postgres" como usuario y como contraseña
+createuser --interactive -P postgres
+```
+
+Uso:
+
+```bash
+# Inicia el servidor
+postgres -D /usr/local/var/postgres
+# Inicia el cliente
+psql -h localhost -d fm_services_dev
+```
+
+Esquema de la base de datos:
+
+```sql
+create table corpus
+(
+  "ticketId"         integer not null,
+  "corpusId"         text not null,
+  corpus             text,
+  tsv                tsvector,
+  unidad             text,
+  "noIdentificacion" text,
+  "valorUnitario"    float,
+  emisor             text not null,
+  receptor           text,
+  constraint "PK_Constraint_CorpusId" primary key ("corpusId")
+)
+with (
+  OIDS=FALSE
+);
+
+alter table corpus owner to postgres;
+
+create trigger tsvectorupdate
+before insert or update on corpus for each row execute procedure
+tsvector_update_trigger(tsv, 'pg_catalog.spanish', corpus);
+
+create index corpus_tsv_idx on corpus using gin(tsv);
+
+grant insert, select on table corpus to postgres;
+```
 
 ## Primeros pasos
 
 1. [Escribiendo en redis](#escribiendo-en-redis)
 2. [Arrancando XmlIndexer](#arrancando-xmlindexer)
-3. Listo
+3. Listo 😛👍
 
 #### Escribiendo en redis
 
