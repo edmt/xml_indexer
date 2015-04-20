@@ -11,6 +11,7 @@ defmodule Corpus do
     field :valorUnitario,    :float
     field :emisor,           :string
     field :receptor,         :string
+    field :created_at,       Ecto.DateTime
   end
 end
 

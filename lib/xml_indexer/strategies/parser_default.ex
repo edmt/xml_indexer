@@ -20,7 +20,8 @@ defmodule XmlIndexer.Xml.Parser.Default do
         valorUnitario: valor_unitario(corpus),
         noIdentificacion: no_identificacion(corpus),
         emisor: _emisor,
-        receptor: _receptor
+        receptor: _receptor,
+        created_at: Ecto.DateTime.utc
       }
     end
   end
