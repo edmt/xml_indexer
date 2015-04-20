@@ -3,7 +3,7 @@ defmodule XmlIndexer.Mixfile do
 
   def project do
     [app: :xml_indexer,
-     version: "1.0.0",
+     version: "1.0.1",
      elixir: "~> 1.0",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -32,8 +32,8 @@ defmodule XmlIndexer.Mixfile do
   defp deps do
     [
       {:exredis, "~> 0.1.1"},
-      {:postgrex, "~> 0.8.0"},
-      {:ecto, "~> 0.9.0"},
+      {:postgrex, "~> 0.8.1"},
+      {:ecto, "~> 0.10.2"},
       {:poison, "~> 1.3.1" },
       {:exrm, "~> 0.15.3"}
     ]
