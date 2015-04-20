@@ -32,8 +32,8 @@ defmodule XmlIndexer.Mixfile do
   defp deps do
     [
       {:exredis, "~> 0.1.1"},
-      {:postgrex, "~> 0.8.0"},
-      {:ecto, "~> 0.9.0"},
+      {:postgrex, "~> 0.8.1"},
+      {:ecto, "~> 0.10.2"},
       {:poison, "~> 1.3.1" },
       {:exrm, "~> 0.15.3"}
     ]
