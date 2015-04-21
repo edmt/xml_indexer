@@ -6,7 +6,7 @@ defmodule XmlIndexer.Redis.Flush do
   @ms       1
   @second   1000 * @ms
   @minute   60 * @second
-  @interval  5 * @minute
+  @interval  5 * @second
 
   ## External API
   def start_link(redis, queue) do
@@ -18,7 +18,7 @@ defmodule XmlIndexer.Redis.Flush do
   def handle_info(:tick, _state) do
     [redis, queue] = _state
     current_time   = :calendar.universal_time
-    documents = redis |> Exredis.query ["LRANGE", "queue:#{queue}-process", "0", "-1"]
+    documents = redis |> Exredis.query ["LRANGE", "queue:#{queue}-process", "0", "20"]
     Logger.debug("Flushing process is running. Requeueing #{Enum.count(documents)} documents.")
 
     for doc <- documents do
