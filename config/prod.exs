@@ -6,7 +6,7 @@ config :xml_indexer, :redis,
   port: 6379,
   database: 0,
   password: "",
-  reconnect_sleep: :no_reconnect,
+  reconnect_sleep: 5000,
   consumer_queue: "xml_index"
 
 config :xml_indexer, XmlIndexer.Repo,
