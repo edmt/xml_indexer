@@ -14,7 +14,7 @@ defmodule XmlIndexer.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:postgrex, :decimal, :poolboy, :ecto, :exredis, :eredis, :poison, :mix, :xmerl],
+    [applications: [:postgrex, :decimal, :poolboy, :ecto, :exredis, :eredis, :poison, :xmerl],
      registered: [:xml_indexer],
      mod: {XmlIndexer, []}
     ]
