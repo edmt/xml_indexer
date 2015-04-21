@@ -16,7 +16,7 @@ defmodule XmlIndexer.Indexer do
   ## GenServer implementation
   def handle_cast({:index, document}, _state) do
     case Poison.Parser.parse(document) do
-      {:ok, %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id, "created_at" => _created_at}} ->
+      {:ok, %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id, "created_at" => _created_at}} when is_integer(ticket_id) ->
 
         Logger.debug "Indexando ticket: #{ticket_id}, company_rfc: #{rfc}"
         { xml, _rest}  = extract(xml_string)
