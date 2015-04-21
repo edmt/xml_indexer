@@ -19,7 +19,7 @@ defmodule XmlIndexer.Indexer do
       {:ok, %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id, "created_at" => _created_at}} ->
 
         Logger.debug "Indexando ticket: #{ticket_id}, company_rfc: #{rfc}"
-        { xml, _rest}  = extract(Mix.env, xml_string)
+        { xml, _rest}  = extract(xml_string)
         XmlIndexer.Xml.extract(xml, rfc, [ticket_id: ticket_id]) |> Corpus.Query.save_all
         XmlIndexer.Redis.Acknowledge.ack document
 
@@ -31,6 +31,5 @@ defmodule XmlIndexer.Indexer do
     { :noreply, [] }
   end
 
-  defp extract(:prod, document), do: :binary.bin_to_list(document) |> :xmerl_scan.string
-  defp extract(:dev, document), do: :xmerl_scan.file(document)
+  defp extract(document), do: :binary.bin_to_list(document) |> :xmerl_scan.string
 end
