@@ -18,11 +18,25 @@ defmodule XmlIndexer.Indexer do
     case Poison.Parser.parse(document) do
       {:ok, %{"xml_string" => xml_string, "company_rfc" => rfc, "ticket_id" => ticket_id, "created_at" => _created_at}} when is_integer(ticket_id) ->
 
-        Logger.debug "Indexando ticket: #{ticket_id}, company_rfc: #{rfc}"
+        Logger.debug "Indexing ticket: #{ticket_id}, company_rfc: #{rfc}"
         { xml, _rest}  = extract(xml_string)
-        XmlIndexer.Xml.extract(xml, rfc, [ticket_id: ticket_id]) |> Corpus.Query.save_all
-        XmlIndexer.Redis.Acknowledge.ack document
 
+        try do
+          # Extracts xml data and tries to save it
+          XmlIndexer.Xml.extract(xml, rfc, [ticket_id: ticket_id]) |> Corpus.Query.save_all
+          # If it fails, it will not be acknowledged, so the next time it will be reprocessed
+          XmlIndexer.Redis.Acknowledge.ack document
+        rescue
+          e in Postgrex.Error ->
+            # Also, in case of a unique violation, it will be removed...
+            case e do
+              %Postgrex.Error{postgres: %{code: code}} when code === :unique_violation ->
+                Logger.debug "Removing duplicate document. It is already in database..."
+                XmlIndexer.Redis.Acknowledge.ack document
+              _ ->
+                Logger.debug "Weird error. What can I do?"
+            end
+        end
       _ ->
         Logger.debug "Not a valid document #{inspect document}"
         XmlIndexer.Redis.Acknowledge.ack document
