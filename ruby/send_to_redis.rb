@@ -520,9 +520,11 @@ xml_string = <<XML
 </cfdi:Comprobante>
 XML
 
-RedisService::XMLIndexer.new({
-  ticket_id: 101,
-  xml_string: xml_string,
-  company_rfc: "SORIANA",
-  owner_rfc: "BAR"
-}).send!
+30.times do |n|
+  RedisService::XMLIndexer.new({
+    ticket_id: n,
+    xml_string: xml_string,
+    company_rfc: "SORIANA",
+    owner_rfc: "BAR"
+  }).send!
+end
