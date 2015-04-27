@@ -99,7 +99,8 @@ create table corpus
   "valorUnitario"    float,
   emisor             text not null,
   receptor           text,
-  constraint "PK_Constraint_CorpusId" primary key ("corpusId")
+  created_at         timestamp without time zone,
+  constraint "PK_Constraint_CorpusId" PRIMARY KEY ("ticketId", "corpusId")
 )
 with (
   OIDS=FALSE
@@ -142,7 +143,7 @@ Pseudocódigo:
 
 ```ruby
 payload = {
-  id:          1,
+  ticket_id:   1,
   xml_string:  "<xml>...</xml>",
   company_rfc: "AAA010101AAA",
   owner_rfc:   "XYZ999999ZYX",
