@@ -22,6 +22,7 @@ defmodule XmlIndexer.Redis.SubSupervisor do
         Logger.debug "Parent process: #{inspect redis}"
         Supervisor.start_child(sup, worker(XmlIndexer.Redis.Acknowledge, [redis, queue]))
         Supervisor.start_child(sup, worker(XmlIndexer.Redis.Flush,       [redis, queue]))
+        Supervisor.start_child(sup, worker(XmlIndexer.Redis.Revision,    [redis, queue]))
         Supervisor.start_child(sup, worker(XmlIndexer.Redis.Polling,     [redis, queue]))
       _ ->
         Logger.error "Connection to redis refused"

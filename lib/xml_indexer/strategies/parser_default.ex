@@ -13,7 +13,7 @@ defmodule XmlIndexer.Xml.Parser.Default do
     for corpus <- conceptos(doc) do
       desc = descripcion(corpus)
       %Corpus{
-        ticketId: Keyword.get(options, :ticket_id),
+        ticketId: Map.get(options, "ticket_id"),
         corpusId: corpus_id(_doc_id, corpus),
         corpus: desc,
         unidad: unidad(corpus),
