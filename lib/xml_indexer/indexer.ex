@@ -55,8 +55,8 @@ defmodule XmlIndexer.Indexer do
           {:ok, :xmerl_scan.string(:binary.bin_to_list(xml)), Map.drop(m, ["xml_string"]) }
         catch
           :exit, reason ->
-            Logger.debug "Not a valid xml document. It will be moved to an error queue."
-            #XmlIndexer.Redis.Revision.rev doc
+            Logger.debug "It cannot parse xml document. It will be moved to an error queue."
+            XmlIndexer.Redis.Revision.rev doc
             {:error, reason}
         end
       error -> error
@@ -65,10 +65,8 @@ defmodule XmlIndexer.Indexer do
 
   defp process_xml(tuple) do
     case tuple do
-      {:ok, xml, metadata} ->
-        {xml, _rest} = xml
-        Logger.debug inspect metadata
-        XmlIndexer.Xml.extract(xml, metadata)
+      {:ok, {xml, _rest}, metadata} ->
+        {:ok, XmlIndexer.Xml.extract(xml, metadata)}
       error -> error
     end
   end
@@ -76,8 +74,12 @@ defmodule XmlIndexer.Indexer do
   defp save_to_database(corpuses, doc) do
     try do
       # If it fails for whatever reason, it will not be acknowledged, so the next time it will be reprocessed
-      Corpus.Query.save_all corpuses
-      XmlIndexer.Redis.Acknowledge.ack doc
+      case corpuses do
+        {:ok, c} ->
+          Corpus.Query.save_all c
+          XmlIndexer.Redis.Acknowledge.ack doc
+        _ -> nil
+      end
     rescue
       e in Postgrex.Error ->
         # But in case of a unique violation, it will be removed...
