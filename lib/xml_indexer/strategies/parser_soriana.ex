@@ -15,6 +15,7 @@ defmodule XmlIndexer.Xml.Parser.Soriana do
       desc = descripcion(corpus)
       %Corpus{
         ticketId: Map.get(options, "ticket_id"),
+        receiptId: Map.get(options, "receipt_id"),
         corpusId: corpus_id(_doc_id, corpus),
         corpus: desc,
         unidad: unidad(corpus),

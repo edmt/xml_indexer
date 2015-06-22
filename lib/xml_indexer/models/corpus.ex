@@ -4,6 +4,7 @@ defmodule Corpus do
   @primary_key false
   schema "corpus" do
     field :ticketId,         :integer
+    field :receiptId,        :integer
     field :corpusId,         :string
     field :corpus,           :string
     field :unidad,           :string
