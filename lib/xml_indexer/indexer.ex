@@ -36,10 +36,10 @@ defmodule XmlIndexer.Indexer do
 
   defp parse_message(message, doc) do
     case message do
-      {:ok, %{"ticket_id" => id, "xml_string" => _, "company_rfc" => _, "owner_rfc" => _, "created_at" => _}} when is_integer(id) ->
+      {:ok, %{"ticket_id" => id, "receipt_id" => _, "xml_string" => _, "company_rfc" => _, "owner_rfc" => _, "created_at" => _}} when is_integer(id) ->
         message
-      {:ok, %{"ticket_id" => %{"ticket_id" => id}, "xml_string" => xs, "company_rfc" => company, "owner_rfc" => owner, "created_at" => _created_at}} ->
-        {:ok, %{"ticket_id" => id, "xml_string" => xs, "company_rfc" => company, "owner_rfc" => owner, "created_at" => _created_at}}
+      {:ok, %{"ticket_id" => %{"ticket_id" => id}, "receipt_id" => receipt_id, "xml_string" => xs, "company_rfc" => company, "owner_rfc" => owner, "created_at" => _created_at}} ->
+        {:ok, %{"ticket_id" => id, "receipt_id" => receipt_id, "xml_string" => xs, "company_rfc" => company, "owner_rfc" => owner, "created_at" => _created_at}}
       error ->
         Logger.debug "Not a valid message. It cannot be indexed. It will be removed. Message: #{inspect doc}"
         XmlIndexer.Redis.Acknowledge.ack doc
