@@ -21,7 +21,7 @@ defmodule XmlIndexer.Redis.Polling do
   # Internal API
   defp loop(redis, queue) do
     case redis |> Exredis.query ["RPOPLPUSH", "queue:#{queue}", "queue:#{queue}-process"] do
-      :undefined -> nil
+      :undefined -> :timer.sleep 30000
       document -> XmlIndexer.Indexer.index document
     end
 
