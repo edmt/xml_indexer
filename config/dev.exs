@@ -3,7 +3,7 @@ use Mix.Config
 # Configures the redis client
 config :xml_indexer, :redis,
   host: "redis.dev",
-  port: 6379,
+  port: 6380,
   database: 0,
   password: "",
   reconnect_sleep: :no_reconnect,
@@ -11,7 +11,7 @@ config :xml_indexer, :redis,
 
 config :xml_indexer, XmlIndexer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "fm_services_dev",
+  username: "facturame-development",
+  password: "facturame-development",
+  database: "facturame-development",
   hostname: "postgres.dev"
